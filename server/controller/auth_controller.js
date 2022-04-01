@@ -4,7 +4,6 @@ const db = require('../config/database.js')
 async function registerUser(req, res){
 
     try{
-        console.log(res.status);
         const {username, email, password} = req.body;
 
         let results = await db.query('SELECT username FROM customers WHERE username=?', [username]);

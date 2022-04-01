@@ -4,12 +4,12 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../component/AccountContext";
+import validate from '../../helpers/validation';
 
 import './style.css'
 function SignUp() {
-  const navigate = useNavigate();
   const { setUser } = useContext(AccountContext);
-  
+  const navigate = useNavigate();
   const [usernameReg, setUsername] = useState('');
   const [passwordReg, setPassword] = useState('');
   const [emailReg, setEmail] = useState('');
@@ -17,44 +17,53 @@ function SignUp() {
   const [loginUser, setLoginUser] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
-  const register = async () => {
-    try{
-    const response = await axios.post('http://localhost:3301/auth/register',
-      {
-        username: usernameReg,
-        password: passwordReg,
-        email: emailReg
-      },{ withCredentials: true });
+  const [signupError, setSignupError] = useState();
 
-      if (response.data.error) {
-        console.log(response.data.error);
-      }
-      else if(response.data.loggedIn) {
-        setUser({... response.data});
-      }
-    }catch(error){
-      console.log(error.response);
-    }
+  const register = async () => {
+
+    //if(validate(usernameReg.trim(), passwordReg.trim(), emailReg.trim(), setSignupError)){
+
+      try{
+        const response = await axios.post('http://localhost:3301/auth/register',
+          {
+            username: usernameReg.trim(),
+            password: passwordReg.trim(),
+            email: emailReg.trim()
+          },{ withCredentials: true });
+    
+          if (response.data.error || response.status >= 400) {
+            console.log("error1")
+           setSignupError(response.data.error);
+          }
+          else if(response.data.loggedIn) {
+            setUser({...response.data});
+          }
+        }catch(error){
+          console.log("error2")
+          setSignupError(error.response.data.error);
+        }
+    //}
   }
 
   const login = async () => {
     try{
     const response = await axios.post('http://localhost:3301/auth/login',
       {
-        username: loginUser,
-        password: loginPassword
+        username: loginUser.trim(),
+        password: loginPassword.trim()
       },{ withCredentials: true });
 
         if (response.data.error) {
-          console.log(response.data.error);
+          setSignupError(response.data.error);
         }
         else if(response.data.loggedIn) {
-          setUser({... response.data});
+          setUser({...response.data});
         }
       }catch(error){
-        console.log(error.response);
+        setSignupError(error.response.error);
       }
   };
+  
   
   return (
     <div className="full-signup-container">
@@ -91,6 +100,7 @@ function SignUp() {
                     <i className="fas fa-lock"></i>
                     <input type="password" autoComplete='off' onChange={(e) => { setLoginPassword(e.target.value); }} placeholder="Enter your password" />
                   </div>
+                  <span className='error'>{signupError}</span>
                   <div className="text"><a href="#">Forgot password?</a></div>
                   <div className="button input-box">
                     <input onClick={login} type="button" value="Sumbit" />
@@ -122,6 +132,7 @@ function SignUp() {
                       onChange={(e) => { setPassword(e.target.value); }}
                       placeholder="Enter your password"  />
                   </div>
+                  <span className='error'>{signupError}</span>
                   <div className="button input-box">
                     <input onClick={register} type="button" value="Sumbit" />
                   </div>
