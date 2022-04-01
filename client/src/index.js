@@ -6,7 +6,7 @@ import AuctionAdd from "./pages/Add auction page/auctionAdd.jsx"
 
 ReactDOM.render(
     <BrowserRouter>
-        <AuctionAdd />
+        <App />
     </BrowserRouter>,
   document.getElementById("root")
 );
