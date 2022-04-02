@@ -21,7 +21,7 @@ function SignUp() {
 
   const register = async () => {
 
-    //if(validate(usernameReg.trim(), passwordReg.trim(), emailReg.trim(), setSignupError)){
+    if(validate(usernameReg.trim(), passwordReg.trim(), emailReg.trim(), setSignupError)){
 
       try{
         const response = await axios.post('http://localhost:3301/auth/register',
@@ -42,7 +42,7 @@ function SignUp() {
           console.log("error2")
           setSignupError(error.response.data.error);
         }
-    //}
+    }
   }
 
   const login = async () => {

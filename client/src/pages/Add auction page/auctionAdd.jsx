@@ -13,14 +13,14 @@ let AuctionAdd = () => {
   const formik = useFormik({
     initialValues: {
       title: "",
-      image: "",
       description: "",
       category: "",
       price: "",
-      usedDuration: "",
+      end_date: "",
+      end_time: "",
       contactNumber: "",
-      email: "",
-      location: "",
+      insta_buy: "",
+      minimum_bid: ""
     },
     validationSchema: Yup.object({
       title: Yup.string().min(5, "Must be 5 characters").required("Required"),
@@ -31,7 +31,7 @@ let AuctionAdd = () => {
       price: Yup.string()
         .matches(/^[0-9\b]+$/, "number only")
         .required("Required"),
-      usedDuration: Yup.string().required("Required"),
+      end_time: Yup.string().required("Required"),
       contactNumber: Yup.string()
         .min(10, "Phone number is not valids")
         .max(13, "Phone number is not valids")
@@ -40,70 +40,51 @@ let AuctionAdd = () => {
           "Phone number is not valid"
         )
         .required("Required"),
-      email: Yup.string().email("Invalid Email Format"),
-      location: Yup.string().required("Location is required"),
+      minimum_bid: Yup.string().matches(/^[0-9\b]+$/, "number only").required("minimum_bid is required"),
+      insta_buy: Yup.string().matches(/^[0-9\b]+$/, "number only").required("minimum_bid is required")
     }),
 
     onSubmit: (values) => {
-      console.log("hello");
       sendToDatabase(values);
     },
   });
 
   const [pic, setPic] = useState(null);
-
-  // const fileSelectedHandler = (event) => {
-  //   setPic(event.target.files[0]);
-  // };
-  const id = 1;
+  const [proof, setProof] = useState(null);
   const [checkImage, setCheckImage] = useState("");
+
   const sendToDatabase = (values) => {
     if (pic != null) {
-      var formData = new FormData();
+      const formData = new FormData();
       formData.append("title", values.title);
       formData.append("image", pic);
       formData.append("description", values.description);
       formData.append("category", values.category);
       formData.append("price", values.price);
-      formData.append("used_duration", values.usedDuration);
-
+      formData.append("end_date", values.end_date);
+      formData.append("end_time", values.end_time);
       formData.append("contact_number", values.contactNumber);
-      formData.append("email", values.email);
-      formData.append("location", values.location);
-      formData.append("user_id", id);
+      formData.append("insta_buy", values.insta_buy);
+      formData.append("minimum_bid", values.minimum_bid);
 
-      // const data = {
-      //   title: values.title,
-      //   image: pic,
-      //   description: values.description,
-      //   category: values.category,
-      //   price: values.price,
-      //   used_duration: values.usedDuration,
-      //   contact_number: values.contactNumber,
-      //   email: values.email,
-      //   location: values.location,
-      //   user_id: id,
-      // };
+      for (var value of formData.values()) {
+        console.log(value);
+     }
 
       axios
-        .post("http://localhost:4000/secondProduct/", formData, {
-          headers: { sandesh: "sandesh" },
-        })
+        .post("http://localhost:3301/auth/addAuction",formData,{ withCredentials: true })
         .then((res) => {
           console.log("Data inserted");
           console.log(res);
-          setCheckImage("");
-          formik.resetForm();
         })
         .catch((err) => {
-          console.log(err);
-          console.log("data insert fail");
+          console.log("error came")
         });
     } else {
       setCheckImage("image required");
     }
   };
-  // console.log(pic);
+
   return (
     <p.root>
       <p.div>
@@ -140,23 +121,18 @@ let AuctionAdd = () => {
             )}
           </p.part>
 
-          {/* <p.part>
-            <p>Image</p>{" "}
-            <input
-              onChange={fileSelectedHandler}
-              multiple
-              type="file"
-              required
-              style={{ marginLeft: "-5.5rem" }}
-            />{" "}
-            <span style={{ color: "red" }}> {checkImage}</span>
-          </p.part> */}
-
           <p.part>
             <p>Image</p>
-            <div className="cropperDiv">
-              <span style={{ color: "red" }}> {checkImage}</span>
-            </div>
+            <input style={{marginRight: "21.7em", font: "1.5em"}} name="image" type="file" onChange={(e) => {
+              setPic(e.target.files[0]);
+            }} />
+          </p.part>
+
+          <p.part>
+            <p>Proof of legitimacy</p>
+            <input style={{marginRight: "21.7em", font: "1.5em"}} name="image" type="file" onChange={(e) => {
+              setPic(e.target.files[0]);
+            }} />
           </p.part>
 
           <p.part>
@@ -224,15 +200,15 @@ let AuctionAdd = () => {
                     label="Category"
                     {...formik.getFieldProps("category")}
                   >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Drum">Drum</MenuItem>
-                      <MenuItem value="Guitar">Guitar</MenuItem>
-                      <MenuItem value="Bass">Bass</MenuItem>
-                      <MenuItem value="Keyboard">Keyboard</MenuItem>
-                      <MenuItem value="Microphone">Microphone</MenuItem>
-                      <MenuItem value="Accessories">Accessories</MenuItem>
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="Drum">Drum</MenuItem>
+                    <MenuItem value="Guitar">Guitar</MenuItem>
+                    <MenuItem value="Bass">Bass</MenuItem>
+                    <MenuItem value="Keyboard">Keyboard</MenuItem>
+                    <MenuItem value="Microphone">Microphone</MenuItem>
+                    <MenuItem value="Accessories">Accessories</MenuItem>
                   </Select>
                 </>
               )}
@@ -240,7 +216,7 @@ let AuctionAdd = () => {
           </p.part>
 
           <p.part>
-            <p>Price</p>
+            <p>Start Price</p>
             {formik.touched.price && formik.errors.price ? (
               <TextField
                 id="price"
@@ -261,23 +237,46 @@ let AuctionAdd = () => {
             )}
           </p.part>
           <p.part>
-            <p>Used Duration</p>
-            {formik.touched.usedDuration && formik.errors.usedDuration ? (
-              <TextField
-                id="usedDuration"
+            <p>Auction End date</p>
+            {formik.touched.end_date && formik.errors.end_date ? (
+              <input
+                id="end_date"
                 className="UsedDuration"
+                type="date"
                 variant="outlined"
                 error
-                label={formik.errors.usedDuration}
-                {...formik.getFieldProps("usedDuration")}
+                label={formik.errors.end_date}
+                {...formik.getFieldProps("end-date")}
+              />
+            ) : (
+              <input
+                id="end_date"
+                className="UsedDuration"
+                type="date"
+                label="end_date"
+                variant="outlined"
+                {...formik.getFieldProps("end_date")}
+              />
+            )}
+          </p.part>
+          <p.part>
+            <p>Auction End time</p>
+            {formik.touched.end_time && formik.errors.end_time? (
+              <TextField
+                id="end_time"
+                className="title"
+                variant="outlined"
+                error
+                label={formik.errors.end_time}
+                {...formik.getFieldProps("end_time")}
               />
             ) : (
               <TextField
-                id="usedDuration"
-                className="UsedDuration"
-                label="Used Duration"
+                id="end_time"
+                className="title"
+                label="Time"
                 variant="outlined"
-                {...formik.getFieldProps("usedDuration")}
+                {...formik.getFieldProps("end_time")}
               />
             )}
           </p.part>
@@ -303,44 +302,44 @@ let AuctionAdd = () => {
             )}
           </p.part>
           <p.part>
-            <p>Email</p>
-            {formik.touched.email && formik.errors.email ? (
+            <p>Instabuy price</p>
+            {formik.touched.insta_buy && formik.errors.insta_buy ? (
               <TextField
-                id="email"
+                id="insta_buy"
                 className="Email"
                 variant="outlined"
                 error
-                label={formik.errors.email}
-                {...formik.getFieldProps("email")}
+                label={formik.errors.insta_buy}
+                {...formik.getFieldProps("insta_buy")}
               />
             ) : (
               <TextField
-                id="email"
+                id="insta_buy"
                 className="Email"
-                label="Email"
+                label="Insta buy"
                 variant="outlined"
-                {...formik.getFieldProps("email")}
+                {...formik.getFieldProps("insta_buy")}
               />
             )}
           </p.part>
           <p.part>
-            <p>Location</p>
-            {formik.touched.location && formik.errors.location ? (
+            <p>Minimum bid</p>
+            {formik.touched.minimum_bid && formik.errors.minimum_bid ? (
               <TextField
-                id="location"
+                id="minimum_bid"
                 className="location"
                 variant="outlined"
                 error
-                label={formik.errors.location}
-                {...formik.getFieldProps("location")}
+                label={formik.errors.minimum_bid}
+                {...formik.getFieldProps("minimum_bid")}
               />
             ) : (
               <TextField
-                id="location"
+                id="minimum_bid"
                 className="location"
-                label="location"
+                label="minimum bid"
                 variant="outlined"
-                {...formik.getFieldProps("location")}
+                {...formik.getFieldProps("minimum_bid")}
               />
             )}
           </p.part>
