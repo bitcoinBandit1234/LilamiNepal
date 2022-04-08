@@ -10,7 +10,7 @@ const useAuth = () => {
 
 const PrivateRoutes = () => {
   const isAuth = useAuth();
-  return isAuth ? <Outlet /> : <Navigate to="/" />;
+  return isAuth ? <Outlet /> : <Navigate to="/SignUp" />;
 };
 
 export default PrivateRoutes;

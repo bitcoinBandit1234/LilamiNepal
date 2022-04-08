@@ -1,0 +1,13 @@
+.productDisplay{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+}
+
+.sidebarWrapper{
+    width: 30%;
+}
+
+.wrapper{
+}
