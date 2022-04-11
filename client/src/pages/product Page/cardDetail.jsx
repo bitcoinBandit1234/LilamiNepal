@@ -1,56 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router';
 import './cardDetail.css';
-const { io } = require("socket.io-client");
 
 function ProductDetail(){
-  useEffect(()=>{
-    const socket = io("http://localhost:5069");
-  },[])
+    const [itemDetail, setItemDetail] = useState([]);
+    let isRendered = useRef(false);
+    const {id} = useParams();
 
-  const state = {
-    products: [
-      {
-        "_id": "1",
-        "title": "Nike Shoes",
-        "src": [
-            "https://static-01.daraz.com.np/p/f6ab853dcc55e47ba89156d016746eef.jpg",
-            "https://static-01.daraz.com.np/p/f6ab853dcc55e47ba89156d016746eef.jpg",
-            "https://static-01.daraz.com.np/p/f6ab853dcc55e47ba89156d016746eef.jpg",
-            "https://static-01.daraz.com.np/p/f6ab853dcc55e47ba89156d016746eef.jpg"
-          ],
-        "description": "UI/UX designing, html css tutorials",
-        "content": "Welcome to our channel Dev AT. Here you can learn web designing, UI/UX designing, html css tutorials, css animations and css effects, javascript and jquery tutorials and related so on.",
-        "price": 23,
-        "count": 1
-      }
-    ],
-    index: 0
-  };
+  useEffect(() => {
+    console.log("inside useeffect")
+      isRendered.current = true;
+      axios
+          .get("http://localhost:3301/auth/product/productDetail/" + id)
+          .then(res => {
+              console.log(res.data.data)
+              }
+          )
+          .catch(err => console.log(err));
+      return () => {
+          isRendered.current = false;
+      };
+  }, []);
+  
 
-    const {products, index} = state;
     return(
       <div className="app">
-        {
-          products.map(item =>(
-            <div className="details" key={item._id}>
+            <div className="details">
               <div className="big-img">
-                <img src={item.src[index]} alt=""/>
+                <img src="https://imgs.search.brave.com/x_mHaHeOzAP6m4AO4Y8CwLfTEJEOcsiQUtAu7GAoY50/rs:fit:844:225:1/g:ce/aHR0cHM6Ly90c2Uy/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5h/cVNWRTdUVWNic0xD/UWRGX0ZQZlJnSGFF/SyZwaWQ9QXBp" alt=""/>
               </div>
 
               <div className="box">
                 <div className="row">
-                  <h2>{item.title}</h2>
-                  <span>${item.price}</span>
+                  <h2>sandesh</h2>
+                  <span>price</span>
                 </div>
 
-                <p>{item.description}</p>
-                <p>{item.content}</p>
-                <button className="cart">Add to cart</button>
+                <p>description</p>
+                <button className="cart">Bid</button>
 
               </div>
             </div>
-          ))
-        }
       </div>
     );
   }

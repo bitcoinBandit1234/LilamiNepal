@@ -6,6 +6,8 @@ import PrivateRoutes from "./component/PrivateRoutes.jsx";
 import AuctionAdd from "./pages/Add auction page/auctionAdd.jsx";
 import Home_page from "./pages/Home page/home_page.jsx";
 import Spinner from "./helpers/spinner.js";
+import CardDisplay from "./pages/product Page/CardDesign.jsx"
+import ProductDetail from "./pages/product Page/cardDetail.jsx";
 
 const Views = () => {
   const { user } = useContext(AccountContext);
@@ -15,6 +17,8 @@ const Views = () => {
     <Routes>
       <Route path="/signup" element={<SignUp/>} />
       <Route path="/" element={<Home_page/>} />
+      <Route path="/product" element={<CardDisplay/>} />
+      <Route path="/productDetail/:id" element={<ProductDetail/>} />
       <Route element={<PrivateRoutes />}>
         <Route path="/addAuction" element={AuctionAdd} />
       </Route>

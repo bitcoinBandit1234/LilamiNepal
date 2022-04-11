@@ -16,7 +16,7 @@ function NavBar(){
         <li><Link to="/signup">Login</Link></li>
         }
 
-        <li><Link to="/Browse">Browse</Link></li>
+        <li><Link to="/product">Browse</Link></li>
 
         {user.loggedIn? <li><Link to="/profile">profile</Link></li>: 
         <></>

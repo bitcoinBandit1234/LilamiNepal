@@ -37,4 +37,41 @@ const addAuction = async (req, res) => {
   }
 }
 
-module.exports = addAuction;
+const getAuctionItems = async (req, resp) => {
+  try {
+    const query = "SELECT * FROM 	auction";
+    const output = await db.query(query); 
+    
+    if(output){
+      resp.status(200).json({message: "succesfull fetching of products from db", data: output});
+    }
+
+  } catch (err) {
+    resp.status(400).json({
+      error: "failure in fetching products from database",
+    });
+  }
+}
+
+const extractAuctionDetail =  async (req, resp) => {
+  try {
+    const sql = "SELECT * FROM auction where auction_id=?";
+
+    const output = await db.query(sql, [req.params.id]);
+
+    if(output && output.length>0){
+        resp.status(200).json({
+          message: "data succesfully fetched from the database",
+          data: output,
+        });
+      } 
+      else{
+        resp.status(400).json({error:"product detail not found", data: null})
+      }
+    }
+   catch(err) {
+    resp.status(400).json({
+      error: "server failure on data fetching", data: null});
+  }
+}
+module.exports = {addAuction, getAuctionItems, extractAuctionDetail};

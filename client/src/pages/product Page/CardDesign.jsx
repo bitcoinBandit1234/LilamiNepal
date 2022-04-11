@@ -1,44 +1,76 @@
 import Card from "./card";
 import Sidebar from "./sidebar.jsx";
 import "./cardDesign.css"
-import HomeNav from "./HomeNav";
+import NavBar from "../../component/navbar/nav_bar";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 function CardDisplay(){
-    return(
+
+  const [auctionItems, setAuctionItems] = useState([]);
+  let isRendered = useRef(false);
+
+useEffect(() => {
+  console.log("inside useeffect")
+    isRendered.current = true;
+    axios
+        .get("http://localhost:3301/auth/addAuction")
+        .then(res => {
+            if (isRendered.current && res.status <= 200) {
+                setAuctionItems(res.data.data);
+            }
+        })
+        .catch(err => console.log(err));
+    return () => {
+        isRendered.current = false;
+    };
+}, []);
+
+   return( 
       <>
-      <HomeNav/>
+      <NavBar/>
       <div className="productDisplay">
         <div className="sidebarWrapper">
           <Sidebar/>
         </div>
         <div className="wrapper">
+          {auctionItems.length != 0?    
+            <Link style={{textDecoration:"none", color: "black"}} to={"/productDetail/" + auctionItems[0].auction_id}>
+              <Card
+              />
+            </Link> 
+            :
+          <>No products found !</>
+          }     
           <Card
-          img="https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
-          title="The Everyday Salad"
-          description="Take your boring salads up a knotch. This recipe is perfect for lunch
-          and only contains 5 ingredients!"
-          />
-
-      <Card
-        img="https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
-        title="Simple Risotto"
-        description="Fear Risotto no more! This simple recipe is perfect for family dinners."
-      />
-
-      <Card
-        img="https://images.unsplash.com/photo-1529928520614-7c76e2d99740?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
-        title="Baked Cod with Vegetables"
-        description="Baked Cod with Vegetables. 30 minute meal!"
-      />
-
-<Card
-        img="https://images.unsplash.com/photo-1529928520614-7c76e2d99740?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjE0NTg5fQ"
-        title="Baked Cod with Vegetables"
-        description="Baked Cod with Vegetables. 30 minute meal!"
-      />
+          img="https://static-01.daraz.pk/original/946c1bed3562e7ab71e071e50af582ce.jpg"
+          title="heater"
+          description="minimum bid: 12000"
+          />  
+          <Card
+          img="https://static-01.daraz.pk/p/5c68c2c6ef29c783e418972dde7fb030.jpg"
+          title="earphones"
+          description="minimum bid: 10000"
+          />  
+          <Card
+          img="https://static-01.daraz.pk/p/4dd5d5f1b3b4f45e8d3cf1b0fc2c7f0c.jpg"
+          title="refregerator"
+          description="minimum bid: 20000"
+          />  
+          <Card
+          img="https://static-01.daraz.pk/p/6eba44162067821aa4faa5c1e107def4.jpg_200x200q90-product.jpg_.webp"
+          title="watch"
+          description="minimum bid: 32000"
+          />  
+          <Card
+          img="https://static-01.daraz.pk/p/94f2f423a084292f7968b6c1f2b89d59.jpg_200x200q90-product.jpg_.webp"
+          title="cap"
+          description="minimum bid: 13000"
+          />  
     </div>
     </div>
     </>
   );
-}
 
+}
 export default CardDisplay;
