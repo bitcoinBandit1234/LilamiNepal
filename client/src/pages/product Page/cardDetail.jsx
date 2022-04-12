@@ -5,6 +5,9 @@ import './cardDetail.css';
 
 function ProductDetail(){
     const [itemDetail, setItemDetail] = useState([]);
+    const [nextBidAmt, setNextBid] = useState(0);
+    const [currentBidder, setCurrentBidder] = useState({});
+
     let isRendered = useRef(false);
     const {id} = useParams();
 
@@ -15,6 +18,7 @@ function ProductDetail(){
           .get("http://localhost:3301/auth/product/productDetail/" + id)
           .then(res => {
               console.log(res.data.data)
+              setItemDetail(res.data.data)
               }
           )
           .catch(err => console.log(err));
@@ -25,23 +29,39 @@ function ProductDetail(){
   
 
     return(
-      <div className="app">
-            <div className="details">
-              <div className="big-img">
-                <img src="https://imgs.search.brave.com/x_mHaHeOzAP6m4AO4Y8CwLfTEJEOcsiQUtAu7GAoY50/rs:fit:844:225:1/g:ce/aHR0cHM6Ly90c2Uy/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5h/cVNWRTdUVWNic0xD/UWRGX0ZQZlJnSGFF/SyZwaWQ9QXBp" alt=""/>
+      <div className="app" style={{fontFamily: "ubuntu, sans-serif"}}>
+        {itemDetail.length != 0? 
+          <div className="details">
+            <div className="big-img">
+              <img src={itemDetail[0].image} alt=""/>
+            </div>
+      
+            <div className="box">
+              <div className="row">
+                <h2>{itemDetail[0].title}</h2>
+                <span>posted on: { itemDetail[0].auction_start_date}</span>
+              </div>
+              <p>{itemDetail[0].description}</p>
+              <div style={{borderBottom: "2px solid	#778899", marginBottom: "6px"}}>
+                <h4 style={{marginBottom: "5px"}}>Info</h4>
+                
+                <span style={{display: "block", marginBottom: "10px"}}>auction end date: {itemDetail[0].auction_end_date}</span>
+                <span style={{display: "block", marginBottom: "10px"}}>auction end time: {itemDetail[0].auction_end_time}</span>
+                <span style={{display: "block", marginBottom: "10px"}}>starting price: {itemDetail[0].starting_price}</span>
               </div>
 
-              <div className="box">
-                <div className="row">
-                  <h2>sandesh</h2>
-                  <span>price</span>
-                </div>
-
-                <p>description</p>
+              <div>
+                <h4 style={{marginBottom: "5px"}}>Auction</h4>
+                <span style={{display: "block", marginBottom: "10px"}}>current Highest Bidder: {itemDetail[0].starting_price}</span>
+                <span style={{display: "block", marginBottom: "10px"}}>Current Bid Amount {itemDetail[0].starting_price}</span>
+                <span style={{display: "block", marginBottom: "10px"}}>Next bid amount: {nextBidAmt}</span>
+                <span style={{display: "block", marginBottom: "10px"}}>Time Remaining: 22: 15: 40</span>
                 <button className="cart">Bid</button>
-
               </div>
             </div>
+          </div>:
+          <>Item detail not found</>
+          }
       </div>
     );
   }

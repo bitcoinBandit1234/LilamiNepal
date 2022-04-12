@@ -6,9 +6,8 @@ function Card(props){
           <div className="card__body">
             <img src={props.img} className="card__image" />
             <h4 className="card__title">{props.title}</h4>
-            <p className="card__description">{props.description}</p>
+            <p className="card__timer">Time left: {props.timer}</p>
           </div>
-          <button className="card__timer">22: 33: 40</button>
         </div>
       );
 }

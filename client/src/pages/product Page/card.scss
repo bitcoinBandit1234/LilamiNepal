@@ -56,16 +56,11 @@ body {
     padding: 1rem;
   }
 
-  &__description {
+  &__timer {
     padding: 0 1rem;
   }
 
   &:hover {
     transform: scale(1.02);
-  }
-
-  &:hover &__btn {
-    background: $clr-primary;
-    color: white;
   }
 }

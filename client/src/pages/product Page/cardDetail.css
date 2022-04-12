@@ -1,8 +1,10 @@
+
 .app{
     max-width: 1200px;
     width: 100%;
     margin: 100px auto;
     box-shadow: 0 0 5px #ccc;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
   }
   .details{
     display: flex;
@@ -28,6 +30,7 @@
     max-width: 500px;
     min-width: 290px;
     margin: 25px;
+    letter-spacing: 0.3px;
   }
   .box .row{
     display: flex;
@@ -40,6 +43,8 @@
   }
   .box .row span{
     color: crimson;
+    margin-left: 30px;
+    padding-top: 3px;
   }
   .box .colors button{
     width: 30px;
