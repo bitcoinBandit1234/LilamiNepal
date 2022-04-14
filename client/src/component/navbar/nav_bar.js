@@ -1,10 +1,24 @@
-import { useRef, useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import './navStyle.css'
 import { AccountContext } from '../AccountContext.jsx'
+import axios from "axios";
+import {useCookies} from "react-cookie";
 
 function NavBar(){
-  const {user} = useContext(AccountContext);
+
+  const {user, setUser} = useContext(AccountContext);
+  const [removeCookie] = use
+  const logoutUser = async ()=>{
+    try{
+      const loggedOutStatus = await axios.get("http://localhost:3301/auth/logout", {withCredentials: true});
+
+      setUser({... loggedOutStatus});
+      
+    }catch(error){
+      console.log(error);
+    }
+  }
 
     return (
      <nav> 
@@ -26,7 +40,7 @@ function NavBar(){
           <></>
         }
 
-        {user.username? <li><Link to="/profile">logout</Link></li>: 
+        {user.username? <li className="logout" onClick={logoutUser}>logout</li>: 
           <></>
         }
       </div>
