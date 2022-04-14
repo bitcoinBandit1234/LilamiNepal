@@ -13,7 +13,7 @@ function CardDisplay(){
 useEffect(() => {
     isRendered.current = true;
     axios
-        .get("http://localhost:3301/auth/addAuction")
+        .get("http://localhost:3301/product/addAuction")
         .then(res => {
             if (isRendered.current && res.status <= 200) {
                 setAuctionItems(res.data.data);
@@ -44,7 +44,7 @@ useEffect(() => {
             :
             <>No products found !</>
           }
-    </div>
+    </div> 
     </div>
     </>
   );

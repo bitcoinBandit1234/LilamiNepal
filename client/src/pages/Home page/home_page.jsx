@@ -7,8 +7,17 @@ import popular3 from "../../assets/ebay-images/phone.jpg";
 import popular4 from "../../assets/ebay-images/sell.jpg";
 import popular5 from "../../assets/ebay-images/services.png";
 import popular6 from "../../assets/ebay-images/watches.jpg";
+import { useEffect } from "react";
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:3301", {withCredentials: true});
 
 function Home_page(){
+    useEffect(() => {
+      socket.on('connects', (data)=>{
+          console.log(data);
+      })
+    }, [])
+    
     return(
         <>
         <NavBar />

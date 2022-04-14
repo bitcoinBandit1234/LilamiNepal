@@ -53,7 +53,7 @@ async function loginUser(req, res){
 
         if(isSamePassword){
             req.session.user = {
-                id: loginDetails[0].userid,
+                id: loginDetails[0].customer_id,
                 username: username
             }
 
@@ -69,6 +69,13 @@ async function loginUser(req, res){
     }
 }
 
+async function logoutUser(req, resp){
+    if(req.session.user && req.session.user.username){
+        req.session.destroy();
+        resp.clearCookie('connect.sid');
+        return resp.status(200).json({loggedIn: false});
+    }
+}
 
 function isAuthenticated(req, res){
     if(req.session.user && req.session.user.username){
@@ -77,4 +84,4 @@ function isAuthenticated(req, res){
     return res.status(200).json({loggedIn: false, message: "Not logged in"})
 }
 
-module.exports = {registerUser, loginUser, isAuthenticated}
+module.exports = {registerUser, loginUser, isAuthenticated, logoutUser}

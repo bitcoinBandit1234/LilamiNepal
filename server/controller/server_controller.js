@@ -28,4 +28,4 @@ const corsConfig = {
     credentials: true
 }
 
-module.exports = {  expressSession, corsConfig, sessionWrap }
+module.exports = { expressSession, corsConfig, sessionWrap }

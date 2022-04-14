@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import './cardDetail.css';
+import { socket } from '../Home page/home_page';
 
 function ProductDetail(){
     const [itemDetail, setItemDetail] = useState([]);
@@ -11,11 +12,14 @@ function ProductDetail(){
     let isRendered = useRef(false);
     const {id} = useParams();
 
+  useEffect(()=>{
+
+  })
+
   useEffect(() => {
-    console.log("inside useeffect")
       isRendered.current = true;
       axios
-          .get("http://localhost:3301/auth/product/productDetail/" + id)
+          .get("http://localhost:3301/product/productDetail/" + id)
           .then(res => {
               console.log(res.data.data)
               setItemDetail(res.data.data)
