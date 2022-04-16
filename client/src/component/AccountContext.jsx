@@ -28,7 +28,7 @@ const UserContext = ({ children }) => {
           return;
         }
         setUser({ ...data });
-        navigate("/");
+        navigate("/addAuction");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

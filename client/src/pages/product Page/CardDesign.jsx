@@ -33,7 +33,7 @@ useEffect(() => {
           <Sidebar/>
         </div>
         <div className="wrapper">
-          {auctionItems.length != 0?
+          {auctionItems.length !== 0?
             auctionItems.map((item)=>{
               return(
                 <Link key={item.auction_id} style={{textDecoration:"none", color: "black"}} to={"/productDetail/" + item.auction_id}>

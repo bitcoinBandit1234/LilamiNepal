@@ -10,22 +10,25 @@ const addAuction = async (req, res) => {
 
   try {
     let data = req.body;
-    const sql = "INSERT INTO auction (title, description, image, proof, starting_price, auction_start_date, auction_start_time, auction_end_date, auction_end_time, insta_buy, phone_number, customer_id, minimum_bid, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    const sql = "INSERT INTO auction (title, description, image, proof, starting_price, auction_start_date, auction_start_time, auction_end_date, auction_end_time, phone_number, customer_id, minimum_bid, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    const user_id = await db.query("SELECT customer_id from customers WHERE username=?", [req.session.user.username]);
+
     await db.query(
       sql,
       [
         data.title,
         data.description,
         "http://" + req.headers.host + "/" + req.file.path,
-        "sandesh",
+        data.proof,
         parseInt(data.price),
         postedDate,
         postedTime,
         data.end_date,
         data.end_time,
-        parseInt(data.insta_buy),
         data.contact_number,
-        10,
+        user_id[0].customer_id,
         parseInt(data.minimum_bid),
         data.category
       ]);

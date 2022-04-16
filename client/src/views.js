@@ -20,7 +20,7 @@ const Views = () => {
       <Route path="/product" element={<CardDisplay/>} />
       <Route path="/productDetail/:id" element={<ProductDetail/>} />
       <Route element={<PrivateRoutes />}>
-        <Route path="/addAuction" element={AuctionAdd} />
+        <Route path="/addAuction" element={<AuctionAdd/>} />
       </Route>
     </Routes>
   );

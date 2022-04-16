@@ -12,10 +12,6 @@ function ProductDetail(){
     let isRendered = useRef(false);
     const {id} = useParams();
 
-  useEffect(()=>{
-
-  })
-
   useEffect(() => {
       isRendered.current = true;
       axios

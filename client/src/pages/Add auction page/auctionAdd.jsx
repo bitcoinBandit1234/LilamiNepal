@@ -8,22 +8,24 @@ import axios from "axios";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { FormControl, InputLabel } from "@mui/material";
+import NavBar from "../../component/navbar/nav_bar.js";
 
 let AuctionAdd = () => {
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
+      proof: "",
       category: "",
       price: "",
       end_date: "",
       end_time: "",
       contactNumber: "",
-      insta_buy: "",
       minimum_bid: ""
     },
     validationSchema: Yup.object({
-      title: Yup.string().min(5, "Must be 5 characters").required("Required"),
+      title: Yup.string().min(5, "Must be 5 characters").max(8, "max 8 characters long").required("Required"),
+      proof: Yup.string().required("Required"),
       description: Yup.string()
         .min(20, "Must be 20 characters")
         .required("Required"),
@@ -40,8 +42,7 @@ let AuctionAdd = () => {
           "Phone number is not valid"
         )
         .required("Required"),
-      minimum_bid: Yup.string().matches(/^[0-9\b]+$/, "number only").required("minimum_bid is required"),
-      insta_buy: Yup.string().matches(/^[0-9\b]+$/, "number only").required("minimum_bid is required")
+      minimum_bid: Yup.string().matches(/^[0-9\b]+$/, "number only").required("minimum_bid is required")
     }),
 
     onSubmit: (values) => {
@@ -50,7 +51,6 @@ let AuctionAdd = () => {
   });
 
   const [pic, setPic] = useState(null);
-  const [proof, setProof] = useState(null);
   const [checkImage, setCheckImage] = useState("");
 
   const sendToDatabase = (values) => {
@@ -59,23 +59,19 @@ let AuctionAdd = () => {
       formData.append("title", values.title);
       formData.append("image", pic);
       formData.append("description", values.description);
+      formData.append("proof", values.description);
       formData.append("category", values.category);
       formData.append("price", values.price);
       formData.append("end_date", values.end_date);
       formData.append("end_time", values.end_time);
       formData.append("contact_number", values.contactNumber);
-      formData.append("insta_buy", values.insta_buy);
       formData.append("minimum_bid", values.minimum_bid);
 
-      for (var value of formData.values()) {
-        console.log(value);
-     }
-
       axios
-        .post("http://localhost:3301/auth/addAuction",formData,{ withCredentials: true })
+        .post("http://localhost:3301/product/addAuction",formData,{ withCredentials: true })
         .then((res) => {
           console.log("Data inserted");
-          console.log(res);
+          alert("Data succesfully Inserted");
         })
         .catch((err) => {
           console.log("error came")
@@ -86,6 +82,8 @@ let AuctionAdd = () => {
   };
 
   return (
+    <>
+    <NavBar/>
     <p.root>
       <p.div>
         <p.addSellForm>
@@ -130,9 +128,24 @@ let AuctionAdd = () => {
 
           <p.part>
             <p>Proof of legitimacy</p>
-            <input style={{marginRight: "21.7em", font: "1.5em"}} name="image" type="file" onChange={(e) => {
-              setPic(e.target.files[0]);
-            }} />
+            {formik.touched.title && formik.errors.title ? (
+              <TextField
+                id="proof"
+                className="title"
+                variant="outlined"
+                error
+                label={formik.errors.proof}
+                {...formik.getFieldProps("proof")}
+              />
+            ) : (
+              <TextField
+                id="proof"
+                className="title"
+                label="proof"
+                variant="outlined"
+                {...formik.getFieldProps("proof")}
+              />
+            )}
           </p.part>
 
           <p.part>
@@ -182,12 +195,17 @@ let AuctionAdd = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value="Drum">Drum</MenuItem>
-                    <MenuItem value="Guitar">Guitar</MenuItem>
-                    <MenuItem value="Bass">Bass</MenuItem>
-                    <MenuItem value="Keyboard">Keyboard</MenuItem>
-                    <MenuItem value="Microphone">Microphone</MenuItem>
-                    <MenuItem value="Accessories">Accessories</MenuItem>
+                    <MenuItem value="Antiques">Antiques</MenuItem>
+                    <MenuItem value="Currency">Currency</MenuItem>
+                    <MenuItem value="Services">Services</MenuItem>
+                    <MenuItem value="Watches">Watches</MenuItem>
+                    <MenuItem value="Collectibles">Collectibles</MenuItem>
+                    <MenuItem value="Phones">Phones</MenuItem>
+                    <MenuItem value="Celebrity Ownings">Celebrity ownings</MenuItem>
+                    <MenuItem value="Paintings">Painting</MenuItem>
+                    <MenuItem value="Books">Books</MenuItem>
+                    <MenuItem value="Instruments">Instruments</MenuItem>
+                    <MenuItem value="Others">Others</MenuItem>
                   </Select>
                 </>
               ) : (
@@ -203,12 +221,17 @@ let AuctionAdd = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value="Drum">Drum</MenuItem>
-                    <MenuItem value="Guitar">Guitar</MenuItem>
-                    <MenuItem value="Bass">Bass</MenuItem>
-                    <MenuItem value="Keyboard">Keyboard</MenuItem>
-                    <MenuItem value="Microphone">Microphone</MenuItem>
-                    <MenuItem value="Accessories">Accessories</MenuItem>
+                    <MenuItem value="Antiques">Antiques</MenuItem>
+                    <MenuItem value="Currency">Currency</MenuItem>
+                    <MenuItem value="Services">Services</MenuItem>
+                    <MenuItem value="Watches">Watches</MenuItem>
+                    <MenuItem value="Collectibles">Collectibles</MenuItem>
+                    <MenuItem value="Phones">Phones</MenuItem>
+                    <MenuItem value="Celebrity Ownings">Celebrity ownings</MenuItem>
+                    <MenuItem value="Paintings">Painting</MenuItem>
+                    <MenuItem value="Books">Books</MenuItem>
+                    <MenuItem value="Instruments">Instruments</MenuItem>
+                    <MenuItem value="Others">Others</MenuItem>
                   </Select>
                 </>
               )}
@@ -302,27 +325,6 @@ let AuctionAdd = () => {
             )}
           </p.part>
           <p.part>
-            <p>Instabuy price</p>
-            {formik.touched.insta_buy && formik.errors.insta_buy ? (
-              <TextField
-                id="insta_buy"
-                className="Email"
-                variant="outlined"
-                error
-                label={formik.errors.insta_buy}
-                {...formik.getFieldProps("insta_buy")}
-              />
-            ) : (
-              <TextField
-                id="insta_buy"
-                className="Email"
-                label="Insta buy"
-                variant="outlined"
-                {...formik.getFieldProps("insta_buy")}
-              />
-            )}
-          </p.part>
-          <p.part>
             <p>Minimum bid</p>
             {formik.touched.minimum_bid && formik.errors.minimum_bid ? (
               <TextField
@@ -357,6 +359,8 @@ let AuctionAdd = () => {
         </p.addSellForm>
       </p.div>
     </p.root>
+    </>
+    
   );
 };
 
