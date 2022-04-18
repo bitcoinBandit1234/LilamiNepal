@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./chatboxDesign.css";
-import { AccountContext} from '../../component/AccountContext';
-import { useContext } from 'react';
 
 const ChatBox = ({socket, user, seller})=>{
    const [message, setMessage] = useState("");
    const [messageList, setMessageList] = useState([]);
+   const chatRef = useRef();
 
    const sendMessage = async ()=>{
        if(message.trim() != ""){
@@ -15,7 +14,7 @@ const ChatBox = ({socket, user, seller})=>{
                msg: message
            }
            await socket.emit("sendMessage", messageInfo);
-           setMessageList([...messageList, message])
+           setMessageList((list)=>[...list, messageInfo])
        }
    }
 
@@ -28,14 +27,16 @@ const ChatBox = ({socket, user, seller})=>{
 
 
     return(
-    <div className="chatbox">
-        <h3 className="chatbox__title">Message</h3>
+    <div ref={chatRef} className="chatbox">
+        <div className="chatbox__title">
+            <h3>Message</h3>
+            <span onClick={()=>chatRef.current.classList.add("chatbox__invisible")}>&#10060;</span>
+        </div>
+
         <div className="chatbox__messages">
             {messageList.map((indieMessage, index)=>{
-                console.log(messageList);
-                console.log(user.username);
                 return(
-                    <p key={index} className="chatbox_messages__sender">{indieMessage.msg}</p>
+                    <p key={index} className={indieMessage.sender == user.username? "chatbox__messages__sender": "chatbox__messages__receiver"}>{indieMessage.msg}</p>
                 );
             })}
         </div>
