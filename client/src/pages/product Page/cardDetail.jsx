@@ -3,21 +3,30 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import './cardDetail.css';
 import { socket } from '../Home page/home_page';
+import ChatBox from '../../component/chatBox/chatBox';
+import { AccountContext} from '../../component/AccountContext';
+import { useContext } from 'react';
+
 
 function ProductDetail(){
     const [itemDetail, setItemDetail] = useState([]);
     const [nextBidAmt, setNextBid] = useState(0);
     const [currentBidder, setCurrentBidder] = useState({});
-
+    const {user} = useContext(AccountContext);
+    const [render, setRender] = useState(false);
     let isRendered = useRef(false);
     const {id} = useParams();
+
+    const joinChat = ()=>{
+      setRender(true);
+      socket.emit('joinChat', itemDetail[0].customer_id);
+    }
 
   useEffect(() => {
       isRendered.current = true;
       axios
           .get("http://localhost:3301/product/productDetail/" + id)
           .then(res => {
-              console.log(res.data.data)
               setItemDetail(res.data.data)
               }
           )
@@ -44,24 +53,25 @@ function ProductDetail(){
               <p>{itemDetail[0].description}</p>
               <div style={{borderBottom: "2px solid	#778899", marginBottom: "6px"}}>
                 <h4 style={{marginBottom: "5px"}}>Info</h4>
-                
-                <span style={{display: "block", marginBottom: "10px"}}>auction end date: {itemDetail[0].auction_end_date}</span>
-                <span style={{display: "block", marginBottom: "10px"}}>auction end time: {itemDetail[0].auction_end_time}</span>
-                <span style={{display: "block", marginBottom: "10px"}}>starting price: {itemDetail[0].starting_price}</span>
+                <span className='card__detail'>auction end date: {itemDetail[0].auction_end_date}</span>
+                <span className='card__detail'>auction end time: {itemDetail[0].auction_end_time}</span>
+                <span className='card__detail'>starting price: {itemDetail[0].starting_price}</span>
               </div>
 
               <div>
                 <h4 style={{marginBottom: "5px"}}>Auction</h4>
-                <span style={{display: "block", marginBottom: "10px"}}>current Highest Bidder: {itemDetail[0].starting_price}</span>
-                <span style={{display: "block", marginBottom: "10px"}}>Current Bid Amount {itemDetail[0].starting_price}</span>
-                <span style={{display: "block", marginBottom: "10px"}}>Next bid amount: {nextBidAmt}</span>
-                <span style={{display: "block", marginBottom: "10px"}}>Time Remaining: 22: 15: 40</span>
+                <span className='card__detail'>current Highest Bidder: {itemDetail[0].starting_price}</span>
+                <span className='card__detail'>Current Bid Amount {itemDetail[0].starting_price}</span>
+                <span className='card__detail'>Next bid amount: {nextBidAmt}</span>
+                <span className='card__detail'>Time Remaining: 22: 15: 40</span>
                 <button className="cart">Bid</button>
+                <button className="cart cart2" onClick={joinChat}>Chat</button>
               </div>
             </div>
           </div>:
           <>Item detail not found</>
           }
+          {render? <ChatBox socket={socket} user={user} seller={itemDetail[0].customer_id}/>: <></>}
       </div>
     );
   }

@@ -7,6 +7,7 @@ import axios from "axios";
 function NavBar(){
 
   const {user, setUser} = useContext(AccountContext);
+  
   const logoutUser = async ()=>{
     try{
       const loggedOutStatus = await axios.get("http://localhost:3301/auth/logout", {withCredentials: true});

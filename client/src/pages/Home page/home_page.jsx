@@ -9,7 +9,8 @@ import popular5 from "../../assets/ebay-images/services.png";
 import popular6 from "../../assets/ebay-images/watches.jpg";
 import { useEffect } from "react";
 import io from "socket.io-client";
-const socket = io.connect("http://localhost:3301", {withCredentials: true});
+
+export const socket = io.connect("http://localhost:3301", {withCredentials: true});
 
 function Home_page(){
     useEffect(() => {

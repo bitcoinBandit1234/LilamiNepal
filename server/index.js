@@ -25,13 +25,21 @@ app.use(expressSession);
 const io = new Server(server,  {cors: corsConfig});
 io.use(sessionWrap(expressSession));
 io.on("connection", (socket) => {
+
   connectUser(socket);
+
   socket.on('disconnecting', ()=>{
     disconnectUser(socket)
   });
+
+  socket.on('joinChat', (room)=>{
+    socket.join(room);
+  });
+
+  socket.on('sendMessage', (data)=>{
+    socket.to(data.room).emit("receiveMessage", data);
+  })
 });
-
-
 
 
 // Endpoints

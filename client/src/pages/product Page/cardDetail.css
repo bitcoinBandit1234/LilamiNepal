@@ -4,7 +4,8 @@
     width: 100%;
     margin: 100px auto;
     box-shadow: 0 0 5px #ccc;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    position: relative;
   }
   .details{
     display: flex;
@@ -87,6 +88,15 @@
     cursor: pointer;
     padding: 10px 25px;
     margin-top: 15px;
+  }
+
+  .card__detail{
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .cart2{
+    margin-left: 300px;
   }
   
   @media (max-width: 500px){
