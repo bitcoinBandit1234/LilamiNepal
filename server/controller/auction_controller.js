@@ -1,4 +1,5 @@
 const db = require('../config/database.js')
+const RedisClient = require("../config/cache.js");
 
 const addAuction = async (req, res) => {
 
@@ -33,6 +34,20 @@ const addAuction = async (req, res) => {
         data.category
       ]);
       res.status(202).json({loggedIn: true, message: "data inserted"});
+
+      const auctionInfo = await db.query("SELECT auction_id, starting_price, minimum_bid FROM auction ORDER BY auction_id DESC LIMIT 1");
+
+      const productRoom = Math.floor((Math.random() * 10000) + 1);
+
+      RedisClient.hset(
+        `product:${auctionInfo[0].auction_id+1}`,
+        `room`, `${productRoom}`,
+        `startingBid`, `${auctionInfo[0].starting_price}`,
+        `minimumBid`, `${auctionInfo[0].minimum_bid}`,
+        `highestBidder`, '',
+        `currentHighestBid`, 0,
+        `nextBid`, 0
+    );
   }
    catch (err) {
      console.log(err);

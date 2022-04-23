@@ -59,7 +59,7 @@ let AuctionAdd = () => {
       formData.append("title", values.title);
       formData.append("image", pic);
       formData.append("description", values.description);
-      formData.append("proof", values.description);
+      formData.append("proof", values.proof);
       formData.append("category", values.category);
       formData.append("price", values.price);
       formData.append("end_date", values.end_date);

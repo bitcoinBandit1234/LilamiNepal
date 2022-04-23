@@ -11,6 +11,7 @@ const connectUser = async (socket)=>{
                 `id`, `${socket.user.id}`,
                 `connected`, true
             );
+            console.log("connected user")
         }
     }catch(error){
         console.log(error);

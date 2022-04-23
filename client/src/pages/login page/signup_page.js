@@ -18,6 +18,7 @@ function SignUp() {
   const [loginPassword, setLoginPassword] = useState('');
 
   const [signupError, setSignupError] = useState();
+  const [loginError, setLoginError] = useState();
 
   const register = async () => {
 
@@ -37,6 +38,7 @@ function SignUp() {
           }
           else if(response.data.loggedIn) {
             setUser({...response.data});
+            navigate("/");
           }
         }catch(error){
           console.log("error2")
@@ -54,10 +56,11 @@ function SignUp() {
       },{ withCredentials: true });
 
         if (response.data.error) {
-          setSignupError(response.data.error);
+          setLoginError(response.data.error);
         }
         else if(response.data.loggedIn) {
           setUser({...response.data});
+          navigate("/");
         }
       }catch(error){
         setSignupError(error.response.error);

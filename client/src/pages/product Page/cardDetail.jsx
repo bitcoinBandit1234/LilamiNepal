@@ -10,8 +10,9 @@ import { useContext } from 'react';
 
 function ProductDetail(){
     const [itemDetail, setItemDetail] = useState([]);
-    const [nextBidAmt, setNextBid] = useState(0);
-    const [currentBidder, setCurrentBidder] = useState({});
+    const [nextBidAmt, setNextBid] = useState(10);
+    const [currentBid, setCurrentBid] = useState(10);
+    const [currentBidder, setCurrentBidder] = useState("");
     const {user} = useContext(AccountContext);
     const [render, setRender] = useState(false);
     let isRendered = useRef(false);
@@ -24,22 +25,45 @@ function ProductDetail(){
 
   useEffect(() => {
       isRendered.current = true;
+
       axios
           .get("http://localhost:3301/product/productDetail/" + id)
           .then(res => {
-              setItemDetail(res.data.data)
+              setItemDetail(res.data.data);
               }
           )
           .catch(err => console.log(err));
       return () => {
           isRendered.current = false;
-      };
+      }; 
   }, []);
-  
+
+  const enterBid = ()=>{
+    socket.emit('updateBid', itemDetail[0].auction_id);
+  }
+
+  useEffect(()=>{
+    if(itemDetail.length !== 0 ){
+
+       socket.emit('joinBid', itemDetail[0].auction_id);
+
+       socket.on('showBid', (data)=>{
+         setCurrentBid(data.currentHighestBid);
+         setCurrentBidder(data.highestBidder);
+         setNextBid(data.nextBid);
+       })
+
+       socket.on('liveBids', (topBidder, nextBigBid, currBid)=>{
+        setCurrentBid(currBid);
+        setCurrentBidder(topBidder);
+        setNextBid(nextBigBid);         
+       })
+    }
+  },[itemDetail])
 
     return(
       <div className="app" style={{fontFamily: "ubuntu, sans-serif"}}>
-        {itemDetail.length != 0? 
+        {itemDetail.length !== 0? 
           <div className="details">
             <div className="big-img">
               <img src={itemDetail[0].image} alt=""/>
@@ -60,11 +84,11 @@ function ProductDetail(){
 
               <div>
                 <h4 style={{marginBottom: "5px"}}>Auction</h4>
-                <span className='card__detail'>current Highest Bidder: {itemDetail[0].starting_price}</span>
-                <span className='card__detail'>Current Bid Amount {itemDetail[0].starting_price}</span>
+                <span className='card__detail'>current Highest Bidder: {currentBidder}</span>
+                <span className='card__detail'>Current Bid Amount: {currentBid}</span>
                 <span className='card__detail'>Next bid amount: {nextBidAmt}</span>
                 <span className='card__detail'>Time Remaining: 22: 15: 40</span>
-                <button className="cart">Bid</button>
+                <button className="cart" onClick={enterBid}>Bid</button>
                 <button className="cart cart2" onClick={joinChat}>Chat</button>
               </div>
             </div>
