@@ -37,7 +37,7 @@ useEffect(() => {
             auctionItems.map((item)=>{
               return(
                 <Link key={item.auction_id} style={{textDecoration:"none", color: "black"}} to={"/productDetail/" + item.auction_id}>
-                  <Card key={item.auction_id} img={item.image} title={item.title} timer="22:44:27"/>
+                  <Card key={item.auction_id} img={item.image} title={item.title} startDate={item.auction_start_date} startTime={item.auction_start_time} endDate={item.auction_end_date} endTime={item.auction_end_time}/>
                 </Link>
               );
             })

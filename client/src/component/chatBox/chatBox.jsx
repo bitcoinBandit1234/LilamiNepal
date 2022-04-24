@@ -20,7 +20,7 @@ const ChatBox = ({socket, user, seller})=>{
 
 
    useEffect(()=>{
-    socket.on('receiveMessage', ()=>{
+    socket.on('receiveMessage', (data)=>{
         setMessageList((list)=>[...list, data])
     })
    }, [socket])
