@@ -29,9 +29,6 @@ function NavBar(){
 
         <li><Link to="/product">Browse</Link></li>
 
-        {user.loggedIn? <li><Link to="/profile">profile</Link></li>: 
-        <></>
-        }
 
         {user.username? <li><Link to="/addAuction">Add Auction</Link></li>: 
           <></>

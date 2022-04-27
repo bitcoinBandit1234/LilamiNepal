@@ -4,8 +4,8 @@ import "./cardDesign.css"
 import NavBar from "../../component/navbar/nav_bar";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import ProductGridView from "./productGridView";
+import { FooterContainer } from "../../component/footer";
 
 function CardDisplay(){
 
@@ -81,6 +81,7 @@ useEffect(() => {
           }
         </div>  */}
     </div>}
+    <FooterContainer/>
     </>
   );
 

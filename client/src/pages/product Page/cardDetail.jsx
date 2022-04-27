@@ -8,9 +8,14 @@ import { AccountContext} from '../../component/AccountContext';
 import { useContext } from 'react';
 import toSecond from "../../helpers/timeCalculator";
 import Countdown from "react-countdown";
-
+import { useNavigate } from "react-router";
+import KhaltiCheckout from "khalti-checkout-web";
+import config from '../../component/khalti/khaltiConfig';
+import NavBar from '../../component/navbar/nav_bar';
+import { FooterContainer } from '../../component/footer';
 
 function ProductDetail(){
+    let checkout = new KhaltiCheckout(config);
     const [itemDetail, setItemDetail] = useState([]);
     const [nextBidAmt, setNextBid] = useState(10);
     const [currentBid, setCurrentBid] = useState(10);
@@ -21,6 +26,7 @@ function ProductDetail(){
     const bidBtnRef = useRef();
     const chatBtnRef = useRef();
     const {id} = useParams();
+    const navigate = useNavigate();
 
     const joinChat = ()=>{
       setRender(true);
@@ -29,6 +35,10 @@ function ProductDetail(){
 
   useEffect(() => {
       isRendered.current = true;
+
+      if(!user.username){
+        navigate("/signup");
+      }
 
       axios
           .get("http://localhost:3301/product/productDetail/" + id)
@@ -60,6 +70,10 @@ function ProductDetail(){
     }
   };
 
+  const makePayment = ()=>{
+
+  }
+
   useEffect(()=>{
     if(itemDetail.length !== 0 ){
 
@@ -80,6 +94,8 @@ function ProductDetail(){
   },[itemDetail])
 
     return(
+      <>
+      <NavBar/>
       <div className="app" style={{fontFamily: "ubuntu, sans-serif"}}>
         {itemDetail.length !== 0? 
           <div className="details">
@@ -106,15 +122,14 @@ function ProductDetail(){
                 <span className='card__detail'>Current Bid Amount: {currentBid}</span>
                 <span className='card__detail'>Next bid amount: {nextBidAmt}</span>
                 <span className='card__detail'>Time Left: <Countdown date={Date.now()+(toSecond(itemDetail[0].auction_end_date+ " ", itemDetail[0].auction_end_time+":12"))} renderer={renderer} onComplete={completeFunction}/></span>
-                {itemDetail[0].expired !== "true"?
+                {itemDetail[0].expired == "true"?
+                  <button ref={chatBtnRef} onClick={()=>{checkout.show({amount: 1200}); alert("payment succesful")}} className="cart">pay via khalti</button>
+                :
                 <>
                 <button ref={bidBtnRef} className="cart" onClick={enterBid}>Bid</button>
                 <button ref={chatBtnRef} className="cart cart2" onClick={joinChat}>Chat</button>
                 </>
-                :
-                <></>
                 }
-                
               </div>
             </div>
           </div>:
@@ -122,6 +137,8 @@ function ProductDetail(){
           }
           {render? <ChatBox socket={socket} user={user} seller={itemDetail[0].customer_id}/>: <></>}
       </div>
+      <FooterContainer/>
+      </>
     );
   }
 
