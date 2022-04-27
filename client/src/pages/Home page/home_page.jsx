@@ -10,6 +10,7 @@ import popular6 from "../../assets/ebay-images/watches.jpg";
 import { useEffect } from "react";
 import io from "socket.io-client";
 import { Link } from "react-router-dom";
+import { FooterContainer } from "../../component/footer.js";
 
 export const socket = io.connect("http://localhost:3301", {withCredentials: true});
 
@@ -38,34 +39,38 @@ function Home_page(){
             <section className="popular-category-section">
                 <h3>Explore popular categories</h3>
                 <div className="popular-cat-list">
-                    <Link to="/product">
+                    <Link style={{textDecoration:"none", color:"black"}} to="/product">
                     <div className="pop img-1" >
                         <img className="pop-image" src={popular1} alt=""/>
                         <p className="pop-title">antiques</p>
                     </div>
                     </Link>
+                    <Link style={{textDecoration:"none" , color:"black"}} to="/product">
                     <div className="pop img-2">
                         <img className="pop-image" src={popular2} alt=""/>
                         <p className="pop-title">collectibles</p>
                     </div>
-                    <Link to="/product">
+                    </Link>
+                    <Link style={{textDecoration:"none" , color:"black"}} to="/product">
                     <div className="pop img-3">
                         <img className="pop-image" src={popular3} alt=""/>
                         <p className="pop-title">phones</p>
                     </div>
                     </Link>
+                    <Link style={{textDecoration:"none" , color:"black"}} to="/addAuction">
                     <div className= "pop img-4">
                         <img className="pop-image" src={popular4} alt=""/>
                         <p className="pop-title">sell</p>
                     </div>
-                    <Link to="/product">
+                    </Link>
+                    <Link style={{textDecoration:"none" , color:"black"}} to="/product">
                     <div className="pop img-5">
                         <img className="pop-image" src={popular5} alt=""/>
                         <p className="pop-title">services</p>
                     </div>
                     </Link>
 
-                    <Link to="/product">
+                    <Link style={{textDecoration:"none"}} to="/product">
                     <div className="pop img-6">
                         <img className="pop-image" src={popular6} alt=""/>
                         <p className="pop-title">watches</p>
@@ -74,6 +79,7 @@ function Home_page(){
                 </div>
             </section>
     </div>
+    <FooterContainer/>
 </>
 
     );

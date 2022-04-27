@@ -33,15 +33,15 @@ function NavBar(){
         <></>
         }
 
-        {user.username? <li><Link to="/profile">{user.username}</Link></li>: 
-          <></>
-        }
-
         {user.username? <li><Link to="/addAuction">Add Auction</Link></li>: 
           <></>
         }
 
         {user.username? <li className="logout" onClick={logoutUser}>logout</li>: 
+          <></>
+        }
+
+        {user.username? <li style={{marginLeft:"200px"}}><a href="#">{user.username}</a></li>: 
           <></>
         }
       </div>
