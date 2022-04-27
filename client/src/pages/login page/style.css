@@ -218,3 +218,10 @@
     display: none;
   }
 }
+
+.error{
+  font-size: 16px;
+  color: red;
+  text-align: center;
+}
+ 

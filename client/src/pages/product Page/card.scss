@@ -36,6 +36,11 @@ body {
   justify-content: center;
 }
 
+.expiredText{
+  color: #d50000;
+  font-size: medium;
+}
+
 .card {
   overflow: hidden;
   box-shadow: 0 2px 20px $clr-gray300;

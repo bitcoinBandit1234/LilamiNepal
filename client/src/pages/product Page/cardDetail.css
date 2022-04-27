@@ -107,3 +107,7 @@
       width: 50px;
     }
   }
+
+  .unclickable{
+    pointer-events: none;
+  }

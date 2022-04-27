@@ -6,6 +6,8 @@ import { socket } from '../Home page/home_page';
 import ChatBox from '../../component/chatBox/chatBox';
 import { AccountContext} from '../../component/AccountContext';
 import { useContext } from 'react';
+import toSecond from "../../helpers/timeCalculator";
+import Countdown from "react-countdown";
 
 
 function ProductDetail(){
@@ -16,6 +18,8 @@ function ProductDetail(){
     const {user} = useContext(AccountContext);
     const [render, setRender] = useState(false);
     let isRendered = useRef(false);
+    const bidBtnRef = useRef();
+    const chatBtnRef = useRef();
     const {id} = useParams();
 
     const joinChat = ()=>{
@@ -41,6 +45,20 @@ function ProductDetail(){
   const enterBid = ()=>{
     socket.emit('updateBid', itemDetail[0].auction_id);
   }
+
+  const completeFunction = ()=>{
+    bidBtnRef.current.classList.add("unclickable");
+    chatBtnRef.current.classList.add("unclickable");
+    socket.emit("setWinner", itemDetail[0].auction_id);
+  }
+
+  const renderer = ({days, hours, minutes, seconds, completed }) => {
+    if (completed) {
+      return <span className="expiredText">Expired</span>;
+    } else { 
+      return <span>{(days*24)+hours}hr:{minutes}min:{seconds}sec</span>;
+    }
+  };
 
   useEffect(()=>{
     if(itemDetail.length !== 0 ){
@@ -87,9 +105,16 @@ function ProductDetail(){
                 <span className='card__detail'>current Highest Bidder: {currentBidder}</span>
                 <span className='card__detail'>Current Bid Amount: {currentBid}</span>
                 <span className='card__detail'>Next bid amount: {nextBidAmt}</span>
-                <span className='card__detail'>Time Remaining: 22: 15: 40</span>
-                <button className="cart" onClick={enterBid}>Bid</button>
-                <button className="cart cart2" onClick={joinChat}>Chat</button>
+                <span className='card__detail'>Time Left: <Countdown date={Date.now()+(toSecond(itemDetail[0].auction_end_date+ " ", itemDetail[0].auction_end_time+":12"))} renderer={renderer} onComplete={completeFunction}/></span>
+                {itemDetail[0].expired !== "true"?
+                <>
+                <button ref={bidBtnRef} className="cart" onClick={enterBid}>Bid</button>
+                <button ref={chatBtnRef} className="cart cart2" onClick={joinChat}>Chat</button>
+                </>
+                :
+                <></>
+                }
+                
               </div>
             </div>
           </div>:

@@ -63,7 +63,7 @@ function SignUp() {
           navigate("/");
         }
       }catch(error){
-        setSignupError(error.response.error);
+        setLoginError(error.response.data.error);
       }
   };
   
@@ -105,6 +105,7 @@ function SignUp() {
                   </div>
                   <span className='error'>{signupError}</span>
                   <div className="text"><a href="#">Forgot password?</a></div>
+                      <span className='error'>{loginError}</span>
                   <div className="button input-box">
                     <input onClick={login} type="button" value="Sumbit" />
                   </div>

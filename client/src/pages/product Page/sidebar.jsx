@@ -1,31 +1,56 @@
 import './sidebardesign.css';
 
-const sidebarNavItems = [
+export const sidebarNavItems = [
     {
-        display: 'Dashboard',
+        display: 'Antiques',
         icon: <i className='bx bx-home'></i>,
         section: ''
     },
     {
-        display: 'Getting',
+        display: 'Currency',
         icon: <i className='bx bx-star'></i>,
         section: 'started'
     },
     {
-        display: 'Calendar',
+        display: 'Services',
         icon: <i className='bx bx-calendar'></i>,
         section: 'calendar'
     },
     {
-        display: 'User',
+        display: 'Watches',
         icon: <i className='bx bx-user'></i>,
         section: 'user'
     },
     {
-        display: 'Orders',
+        display: 'Collectibles',
         icon: <i className='bx bx-receipt'></i>,
         section: 'order'
     },
+    {
+        display: 'Electronics',
+        icon: <i className='bx bx-home'></i>,
+        section: ''
+    },
+    {
+        display: 'Celebrity ownings',
+        icon: <i className='bx bx-star'></i>,
+        section: 'started'
+    },
+    {
+        display: 'Books',
+        icon: <i className='bx bx-calendar'></i>,
+        section: 'calendar'
+    },
+    {
+        display: 'Watches',
+        icon: <i className='bx bx-user'></i>,
+        section: 'user'
+    },
+    {
+        display: 'Instruments',
+        icon: <i className='bx bx-receipt'></i>,
+        section: 'order'
+    }
 ]
 
 const Sidebar = () => {

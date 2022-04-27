@@ -3,7 +3,7 @@ const http = require("http")
 const cors = require('cors')
 const { corsConfig, expressSession, sessionWrap } = require('./controller/server_controller.js')
 const { Server } = require("socket.io");
-const {connectUser, disconnectUser, productBid, updateBid} = require("./controller/socket_controller.js");
+const {connectUser, disconnectUser, productBid, updateBid, setWinner} = require("./controller/socket_controller.js");
 
 // Importing routes
 
@@ -38,6 +38,10 @@ io.on("connection", (socket) => {
 
   socket.on('disconnecting', ()=>{
     disconnectUser(socket);
+  });
+
+  socket.on('setWinner', (auction_id)=>{
+    setWinner(socket, auction_id);
   });
 
   socket.on('joinChat', (room)=>{

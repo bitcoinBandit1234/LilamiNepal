@@ -2,10 +2,10 @@
     height: 500px;
     width: 430px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    position: absolute;
-    top: 100;
-    right: 100;
     background-color: azure;
+    position: relative;
+    bottom: 0;
+    right: 0;
 }
 
 .chatbox__title{

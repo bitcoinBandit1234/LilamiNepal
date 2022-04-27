@@ -75,6 +75,10 @@ const extractAuctionDetail =  async (req, resp) => {
   try {
     const sql = "SELECT * FROM auction where auction_id=?";
 
+    // if(isNaN(Number(req.params.id))) {
+    //   return resp.status(400).json({ err: "Numbers only, please!"})
+    // }
+
     const output = await db.query(sql, [req.params.id]);
 
     if(output && output.length>0){
